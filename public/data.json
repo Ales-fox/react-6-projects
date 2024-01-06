@@ -76,6 +76,25 @@
         "https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
         "https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
       ]
+    },
+    {
+      "category": 4,
+      "name": "Барселона",
+      "photos": [
+        "https://mykaleidoscope.ru/x/uploads/posts/2022-09/1663224339_1-mykaleidoscope-ru-p-sobor-svyatogo-semeistva-v-barselone-oboi-1.jpg",
+        "https://mykaleidoscope.ru/x/uploads/posts/2022-09/1663416066_3-mykaleidoscope-ru-p-ispaniya-stolitsa-barselona-dostoprimechat-3.jpg",
+        "https://sportishka.com/uploads/posts/2022-04/1650650089_21-sportishka-com-p-ispaniya-barselona-dostoprimechatelnosti-k-21.jpg",
+        "https://krots.top/uploads/posts/2021-09/thumbs/1631767036_28-krot-mobi-p-gorod-vid-sverkhu-krasivie-foto-34.jpg"
+      ]
+    },
+    {
+      "category": 1,
+      "name": "Бали",
+      "photos": [
+        "https://avatars.dzeninfra.ru/get-zen_doc/4361274/pub_605c45a1c07d7f6f2ad41b90_605c4646cc52190412d66df0/scale_1200",      "https://i.pinimg.com/736x/b3/d6/3c/b3d63c9f0b454cf8f7ef2279b0cc2e8c.jpg",
+        "http://vsegda-pomnim.com/uploads/posts/2022-04/1651017370_5-vsegda-pomnim-com-p-bali-okean-foto-7.jpg",
+        "https://vsegda-pomnim.com/uploads/posts/2022-04/1649335120_6-vsegda-pomnim-com-p-bali-plyazh-foto-7.jpg"
+      ]
     }
   ]
 }
