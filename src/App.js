@@ -1,49 +1,108 @@
 import React from 'react';
+import { Collection } from './Collection';
 import './index.scss';
 
-function Collection({ name, images }) {
-  return (
-    <div className="collection">
-      <img className="collection__big" src={images[0]} alt="Item" />
-      <div className="collection__bottom">
-        <img className="collection__mini" src={images[1]} alt="Item" />
-        <img className="collection__mini" src={images[2]} alt="Item" />
-        <img className="collection__mini" src={images[3]} alt="Item" />
-      </div>
-      <h4>{name}</h4>
-    </div>
-  );
-}
-
 function App() {
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [page, setPage] = React.useState(1);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [allCollections, setAllCollections] = React.useState(0);
+  const [quantityPage, setQuantityPage] = React.useState(0);
+  const [collections, setCollections] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState('');
+
+  const cats =  [
+    { "name": "Все" },
+    { "name": "Море" },
+    { "name": "Горы" },
+    { "name": "Архитектура" },
+    { "name": "Города" }
+  ];
+  const limit = 3; // 3 - выбранный лимит количества карточек отображаемых на странице
+
+  // Расчет необходимого количества страниц
+  const checkQuantityPage = (all) => {
+    console.log(all);
+    let A = Math.floor((all)/limit);    
+    let B = all%limit;
+    if    (B > 0) {
+      setQuantityPage(A + 1);
+    } else {
+      setQuantityPage(A);
+    }
+  }
+
+  // useEffect считывает общее количество карточек в коллекции, чтобы далее рассчитать кол-во страниц
+  // В mockapi нельзя запросить количество карточек
+  React.useEffect(() => {
+    const category = categoryId ? `category=${categoryId}` : '';
+
+    fetch(`https://6596af5e6bb4ec36ca0325ce.mockapi.io/photo_collections?${category}`)
+      .then((res) => res.json())
+      .then((json) => {
+        setAllCollections(json.length)
+      })
+      .catch((err) => {
+        console.warn(err);
+        alert('Ошибка при получении данных');
+      })
+      .finally(() => {
+      checkQuantityPage(allCollections);
+    });
+  }, [categoryId, allCollections]);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    const category = categoryId ? `category=${categoryId}` : '';
+
+    fetch(
+      `https://6596af5e6bb4ec36ca0325ce.mockapi.io/photo_collections?page=${page}&limit=${limit}&${category}`,
+      )
+      .then((res) => res.json())
+      .then((json) => setCollections(json))
+      .catch((err) => {
+        console.warn(err);
+        alert('Ошибка при получении данных');
+      })
+      .finally(() => {
+        setIsLoading(false)});
+  }, [categoryId, page]);
+
   return (
     <div className="App">
       <h1>Моя коллекция фотографий</h1>
       <div className="top">
         <ul className="tags">
-          <li className="active">Все</li>
-          <li>Горы</li>
-          <li>Море</li>
-          <li>Архитектура</li>
-          <li>Города</li>
+          {
+            cats.map((obj,i) => (<li onClick={() => setCategoryId(i)} className={categoryId== i ? 'active' : ''} key={obj.name}>{obj.name}</li>))
+          }
         </ul>
-        <input className="search-input" placeholder="Поиск по названию" />
+        <input 
+          value={searchValue} 
+          onChange={(e) => setSearchValue(e.target.value)}
+          className="search-input" 
+          placeholder="Поиск по названию" />
       </div>
       <div className="content">
-        <Collection
-          name="Путешествие по миру"
-          images={[
-            'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTN8fGNpdHl8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-            'https://images.unsplash.com/photo-1560840067-ddcaeb7831d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDB8fGNpdHl8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-            'https://images.unsplash.com/photo-1531219572328-a0171b4448a3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mzl8fGNpdHl8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-            'https://images.unsplash.com/photo-1573108724029-4c46571d6490?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzR8fGNpdHl8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-          ]}
-        />
+        {isLoading ? (
+          <h2>Идет загрузка...</h2>
+          ) : (
+            collections
+            .filter((obj) => obj.name.toLowerCase().includes(searchValue.toLowerCase()))
+            .map((obj, index) => (
+              <Collection
+                key={index}
+                name={obj.name}
+                images={obj.photos}
+              />
+            ))
+        )}
       </div>
       <ul className="pagination">
-        <li>1</li>
-        <li className="active">2</li>
-        <li>3</li>
+        {
+          [...Array(quantityPage)].map((_,i) => <li onClick={() => setPage(i+1)} 
+          className={page == i + 1 ? 'active' : ''} key={i}>{i+1}</li>)
+        }
       </ul>
     </div>
   );
